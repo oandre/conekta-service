@@ -20,16 +20,9 @@ class ChargeRequest extends AbstractType{
 
     public function __construct()
     {
-        $this->setBaseUrl('charges');
+        $this->setUrl('charges');
     }
 
-    /**
-     * @param $url
-     */
-    public function setUrl($url)
-    {
-        $this->getBaseUrl($url);
-    }
 
     /**
      * @param mixed $amount
@@ -125,6 +118,21 @@ class ChargeRequest extends AbstractType{
     public function getReference()
     {
         return $this->reference;
+    }
+
+    public function setBasicParameters()
+    {
+        $parameters = array(
+            'description' => $this->getDescription(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'reference_id' => $this->getReference(),
+            'card' => $this->getToken()
+        );
+
+        $this->setParameters($parameters);
+
+        return $this;
     }
 
 }

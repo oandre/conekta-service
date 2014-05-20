@@ -4,6 +4,12 @@ namespace Conekta\Type;
 
 abstract class AbstractType {
 
+    CONST CONEKTA_VERSION = '1.9.6';
+
+    CONST CONEKTA_API_VERSION = '0.3.0';
+
+    CONST CONEKTA_API_KEY = '1tv5yJp3xnVZ7eK67m4h';
+
     CONST BASE_URL = 'https://api.conekta.io/';
 
     private $url;
@@ -13,7 +19,7 @@ abstract class AbstractType {
     /**
      * @param mixed $url
      */
-    protected function setBaseUrl($url)
+    protected function setUrl($url)
     {
         $this->url = self::BASE_URL . $url;
     }
@@ -21,9 +27,9 @@ abstract class AbstractType {
     /**
      * @return mixed
      */
-    public function getBaseUrl()
+    public function getUrl()
     {
-        return self::BASE_URL . $this->url;
+        return $this->url;
     }
 
     /**
