@@ -8,6 +8,7 @@
 namespace Conekta\Service;
 
 use Conekta\Type\ChargeRequest;
+use Conekta\Type\ChargeResponse;
 use Conekta\Service\Client;
 
 class Service {
@@ -21,17 +22,13 @@ class Service {
 
     public function createCharge(ChargeRequest $charge)
     {
+        $charge->setBasicParameters();
+        $response = $this->client->request($charge, 'POST');
 
-        $param = array(
-            'description' => $this->getDescription(),
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-            'reference_id' => $this->getReference(),
-            'card' => $this->getToken()
-        );
+        $chargeResponse = new ChargeResponse;
+        $chargeResponse->getBasicResponse($response);
 
-        $param = array();
-        $this->client->request($charge, 'POST', $param);
+        var_dump($chargeResponse);
     }
 
 }
