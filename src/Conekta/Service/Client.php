@@ -3,20 +3,27 @@
 namespace Conekta\Service;
 
 use Conekta\Type\AbstractType;
+use Conekta\Type\Error\Error;
 
 class Client {
 
+    CONST CONEKTA_VERSION = '1.9.6';
+
+    CONST CONEKTA_API_VERSION = '0.3.0';
+
+    CONST CONEKTA_API_KEY = '1tv5yJp3xnVZ7eK67m4h';
+
     private function setHeaders()
     {
-        $user_agent = array('bindings_version' => AbstractType::CONEKTA_VERSION,
+        $user_agent = array('bindings_version' => self::CONEKTA_VERSION,
             'lang' => 'php',
             'lang_version' => phpversion(),
             'publisher' => 'conekta',
             'uname' => php_uname());
-        $headers = array('Accept: application/vnd.conekta-v' . AbstractType::CONEKTA_API_VERSION . '+json',
+        $headers = array('Accept: application/vnd.conekta-v' . self::CONEKTA_API_VERSION . '+json',
             'X-Conekta-Client-User-Agent: ' . json_encode($user_agent),
-            'User-Agent: Conekta/v1 PhpBindings/' . AbstractType::CONEKTA_VERSION,
-            'Authorization: Basic ' . base64_encode(AbstractType::CONEKTA_API_KEY . ':' ));
+            'User-Agent: Conekta/v1 PhpBindings/' . self::CONEKTA_VERSION,
+            'Authorization: Basic ' . base64_encode(self::CONEKTA_API_KEY . ':' ));
         return $headers;
     }
 
@@ -59,9 +66,7 @@ class Client {
             default:
                 throw new Exception('Wrong method');
         }
-        echo "URL:";
-        var_dump($url);
-        echo "\nURL\n";
+
         $opts[CURLOPT_URL] = $url;
         $opts[CURLOPT_RETURNTRANSFER] = true;
         $opts[CURLOPT_CONNECTTIMEOUT] = 30;
@@ -70,19 +75,20 @@ class Client {
         $opts[CURLOPT_HTTPHEADER] = $headers;
         $opts[CURLOPT_CAINFO] = dirname(__FILE__) . '/../SslData/ca_bundle.crt';
         curl_setopt_array($curl, $opts);
+
         $response = curl_exec($curl);
-        var_dump($response);
+        $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         if ($response === false) {
-            var_dump(curl_error($curl));
+            $response = curl_error($curl);
         }
 
-        $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
+
         if ($response_code != 200) {
-            var_dump($response_code);
-            echo 'Erro!';
+            Error::errorHandler($response, $response_code);
         }
+
         return json_decode($response, true);
     }
 

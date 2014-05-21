@@ -22,13 +22,46 @@ class Service {
 
     public function createCharge(ChargeRequest $charge)
     {
-        $charge->setBasicParameters();
+        $charge->setChargeParameters();
         $response = $this->client->request($charge, 'POST');
 
         $chargeResponse = new ChargeResponse;
         $chargeResponse->getBasicResponse($response);
 
-        var_dump($chargeResponse);
+        return $chargeResponse;
+    }
+
+    public function findCharge(ChargeRequest $charge)
+    {
+        $charge->setRetriveParameters();
+        $response = $this->client->request($charge, 'GET');
+
+        $chargeResponse = new ChargeResponse();
+        $chargeResponse->getBasicResponse($response);
+
+        return $chargeResponse;
+    }
+
+    public function refundCharge(ChargeRequest $charge)
+    {
+        $charge->setRefundParameters();
+        $response = $this->client->request($charge, 'POST');
+
+        $chargeResponse = new ChargeResponse();
+        $chargeResponse->getRefundResponse($response);
+
+        return $chargeResponse;
+    }
+
+    public function captureCharge(ChargeRequest $charge)
+    {
+        $charge->setCaptureParameters();
+        $response = $this->client->request($charge, 'POST');
+
+        $chargeResponse = new ChargeResponse();
+        $chargeResponse->getCaptureResponse($response);
+
+        return $chargeResponse;
     }
 
 }
