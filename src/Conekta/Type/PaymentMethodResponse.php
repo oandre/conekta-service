@@ -2,6 +2,8 @@
 
 namespace Conekta\Type;
 
+use Conekta\Type\AddressResponse;
+
 class PaymentMethodResponse {
 
     private $name;
@@ -17,6 +19,13 @@ class PaymentMethodResponse {
     private $cvv;
 
     private $brand;
+
+    private $address;
+
+    function __construct()
+    {
+        $this->address = new AddressResponse;
+    }
 
     /**
      * @param mixed $authCode
@@ -130,6 +139,22 @@ class PaymentMethodResponse {
         return $this->object;
     }
 
+    /**
+     * @param \Conekta\Type\AddressResponse $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return \Conekta\Type\AddressResponse
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
     public function getBasicResponse($response)
     {
         $this->setName($response['name']);
@@ -139,6 +164,20 @@ class PaymentMethodResponse {
         $this->setObject($response['object']);
         $this->setCvv($response['last4']);
         $this->setBrand($response['brand']);
+
+        return $this;
+    }
+
+    public function getCaptureResponse($response)
+    {
+        $this->setName($response['name']); //
+        $this->setExpirationMonth($response['exp_month']);//
+        $this->setExpirationYear($response['exp_year']);//
+        $this->setAuthCode($response['auth_code']);//
+        $this->setObject($response['object']);//
+        $this->setCvv($response['last4']);//
+        $this->setBrand($response['brand']);//
+        $this->setAddress($this->getAddress()->getBasicResponse($response['address']));
 
         return $this;
     }

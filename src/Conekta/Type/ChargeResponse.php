@@ -4,6 +4,7 @@ namespace Conekta\Type;
 
 use Conekta\Type\PaymentMethodResponse;
 use Conekta\Type\DetailsResponse;
+use Conekta\Type\RefundsResponse;
 
 class ChargeResponse {
 
@@ -29,6 +30,8 @@ class ChargeResponse {
 
     private $amount;
 
+    private $amountRefunded;
+
     private $fee;
 
     private $customerId;
@@ -47,6 +50,23 @@ class ChargeResponse {
     {
         $this->paymentMethod = new PaymentMethodResponse;
         $this->details = new DetailsResponse;
+        $this->refunds = array();
+    }
+
+    /**
+     * @param mixed $amountRefunded
+     */
+    public function setAmountRefunded($amountRefunded)
+    {
+        $this->amountRefunded = $amountRefunded;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAmountRefunded()
+    {
+        return $this->amountRefunded;
     }
 
     /**
@@ -352,7 +372,15 @@ class ChargeResponse {
         $this->setAmount($response['amount']);
         $this->setFee($response['fee']);
         $this->setCustomerId($response['customer_id']);
-        $this->setRefunds($response['refunds']);
+
+        $refundArray = $this->getRefunds();
+        if (is_array($response['refunds']) && count($response['refunds']) > 0) {
+
+            $refund = new RefundsResponse();
+            $refundArray = $refund->parseBasicResponse($response['refunds']);
+        }
+
+        $this->setRefunds($refundArray);
         $this->setPaymentMethod($this->getPaymentMethod()->getBasicResponse($response['payment_method']));
         $this->setDetails($this->getDetails()->getBasicResponse($response['details']));
         $this->setPaidAt($response['paid_at']);
@@ -360,5 +388,53 @@ class ChargeResponse {
 
         return $this;
     }
+
+    public function getCaptureResponse($response)
+    {
+        $this->setId($response['id']);
+        $this->setLiveMode($response['livemode']);
+        $this->setStatus($response['status']);
+        $this->setCurrency($response['currency']);
+        $this->setDescription($response['description']);
+        $this->setReference($response['reference_id']);
+        $this->setFailureCode($response['failure_code']);
+        $this->setFailureMessage($response['failure_message']);
+        $this->setObject($response['object']);
+        $this->setAmount($response['amount']);
+        $this->setPaymentMethod($this->getPaymentMethod()->getBasicResponse($response['payment_method']));
+        $this->setCreatedAt($response['created_at']);
+
+        return $this;
+    }
+
+    public function getRefundResponse($response)
+    {
+        $this->setId($response['id']);
+        $this->setLiveMode($response['livemode']);
+        $this->setStatus($response['status']);
+        $this->setCurrency($response['currency']);
+        $this->setDescription($response['description']);
+        $this->setReference($response['reference_id']);
+        $this->setFailureCode($response['failure_code']);
+        $this->setFailureMessage($response['failure_message']);
+        $this->setObject($response['object']);
+        $this->setAmount($response['amount']);
+        $this->setAmountRefunded($response['amount_refunded']);
+
+        $refundArray = $this->getRefunds();
+        if (is_array($response['refunds']) && count($response['refunds']) > 0) {
+
+            $refund = new RefundsResponse();
+            $refundArray = $refund->parseBasicResponse($response['refunds']);
+        }
+
+        $this->setRefunds($refundArray);
+        $this->setPaymentMethod($this->getPaymentMethod()->getBasicResponse($response['payment_method']));
+        $this->setCreatedAt($response['created_at']);
+
+        return $this;
+    }
+
+
 
 } 

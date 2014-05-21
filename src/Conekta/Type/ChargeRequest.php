@@ -6,6 +6,8 @@ use Conekta\Type\AbstractType;
 
 class ChargeRequest extends AbstractType{
 
+    private $id;
+
     private $key;
 
     private $token;
@@ -23,6 +25,21 @@ class ChargeRequest extends AbstractType{
         $this->setUrl('charges');
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param mixed $amount
@@ -120,7 +137,7 @@ class ChargeRequest extends AbstractType{
         return $this->reference;
     }
 
-    public function setBasicParameters()
+    public function setChargeParameters()
     {
         $parameters = array(
             'description' => $this->getDescription(),
@@ -131,6 +148,27 @@ class ChargeRequest extends AbstractType{
         );
 
         $this->setParameters($parameters);
+
+        return $this;
+    }
+
+    public function setCaptureParameters()
+    {
+        $this->setUrl('charges/' . $this->getId() . '/capture');
+
+        return $this;
+    }
+
+    public function setRetriveParameters()
+    {
+        $this->setUrl('charges/' . $this->getId());
+
+        return $this;
+    }
+
+    public function setRefundParameters()
+    {
+        $this->setUrl('charges/' . $this->getId() . '/refund');
 
         return $this;
     }

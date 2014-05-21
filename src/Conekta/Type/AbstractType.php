@@ -4,12 +4,6 @@ namespace Conekta\Type;
 
 abstract class AbstractType {
 
-    CONST CONEKTA_VERSION = '1.9.6';
-
-    CONST CONEKTA_API_VERSION = '0.3.0';
-
-    CONST CONEKTA_API_KEY = '1tv5yJp3xnVZ7eK67m4h';
-
     CONST BASE_URL = 'https://api.conekta.io/';
 
     private $url;
@@ -76,7 +70,7 @@ abstract class AbstractType {
             }
 
             if (is_array($v)) {
-                $r[] = self::encode($v, $k, true);
+                $r[] = self::encodeParams($v, $k, true);
             } else {
                 if (is_bool($v)) {
                     $v = $v ? 'true' : 'false';
