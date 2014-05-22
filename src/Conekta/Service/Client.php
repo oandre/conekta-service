@@ -11,7 +11,23 @@ class Client {
 
     CONST CONEKTA_API_VERSION = '0.3.0';
 
-    CONST CONEKTA_API_KEY = '1tv5yJp3xnVZ7eK67m4h';
+    private $conektaApiKey;
+
+    /**
+     * @param mixed $conektaApiKey
+     */
+    public function setConektaApiKey($conektaApiKey)
+    {
+        $this->conektaApiKey = $conektaApiKey;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConektaApiKey()
+    {
+        return $this->conektaApiKey;
+    }
 
     private function setHeaders()
     {
@@ -23,10 +39,9 @@ class Client {
         $headers = array('Accept: application/vnd.conekta-v' . self::CONEKTA_API_VERSION . '+json',
             'X-Conekta-Client-User-Agent: ' . json_encode($user_agent),
             'User-Agent: Conekta/v1 PhpBindings/' . self::CONEKTA_VERSION,
-            'Authorization: Basic ' . base64_encode(self::CONEKTA_API_KEY . ':' ));
+            'Authorization: Basic ' . base64_encode($this->getConektaApiKey() . ':' ));
         return $headers;
     }
-
 
     public function request(AbstractType $type, $method)
     {
@@ -91,5 +106,7 @@ class Client {
 
         return json_decode($response, true);
     }
+
+
 
 } 

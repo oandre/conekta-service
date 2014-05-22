@@ -15,9 +15,10 @@ class Service {
 
     private $client;
 
-    function __construct()
+    function __construct($apiKey)
     {
         $this->client = new Client;
+        $this->client->setConektaApiKey($apiKey);
     }
 
     public function createCharge(ChargeRequest $charge)
@@ -27,6 +28,17 @@ class Service {
 
         $chargeResponse = new ChargeResponse;
         $chargeResponse->getBasicResponse($response);
+
+        return $chargeResponse;
+    }
+
+    public function createAdvancedCharge(ChargeRequest $charge)
+    {
+        $charge->setAdvancedChargeParameters();
+        $response = $this->client->request($charge, 'POST');
+
+        $chargeResponse = new ChargeResponse;
+        $chargeResponse->getAdvancedResponse($response);
 
         return $chargeResponse;
     }
