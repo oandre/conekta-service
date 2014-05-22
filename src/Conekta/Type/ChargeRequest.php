@@ -195,7 +195,7 @@ class ChargeRequest extends AbstractType{
         return $this;
     }
 
-    public function setRetriveParameters()
+    public function setRetrieveParameters()
     {
         $this->setUrl('charges/' . $this->getId());
 

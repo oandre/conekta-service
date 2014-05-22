@@ -45,7 +45,7 @@ class Service {
 
     public function findCharge(ChargeRequest $charge)
     {
-        $charge->setRetriveParameters();
+        $charge->setRetrieveParameters();
         $response = $this->client->request($charge, 'GET');
 
         $chargeResponse = new ChargeResponse();
