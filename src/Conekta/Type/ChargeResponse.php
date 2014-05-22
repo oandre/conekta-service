@@ -158,7 +158,7 @@ class ChargeResponse {
     }
 
     /**
-     * @return mixed
+     * @return DetailsResponse
      */
     public function getDetails()
     {
@@ -384,6 +384,25 @@ class ChargeResponse {
         $this->setPaymentMethod($this->getPaymentMethod()->getBasicResponse($response['payment_method']));
         $this->setDetails($this->getDetails()->getBasicResponse($response['details']));
         $this->setPaidAt($response['paid_at']);
+        $this->setCreatedAt($response['created_at']);
+
+        return $this;
+    }
+
+    public function getAdvancedResponse($response)
+    {
+        $this->setId($response['id']);
+        $this->setLiveMode($response['livemode']);
+        $this->setStatus($response['status']);
+        $this->setCurrency($response['currency']);
+        $this->setDescription($response['description']);
+        $this->setReference($response['reference_id']);
+        $this->setFailureCode($response['failure_code']);
+        $this->setFailureMessage($response['failure_message']);
+        $this->setObject($response['object']);
+        $this->setAmount($response['amount']);
+        $this->setPaymentMethod($this->getPaymentMethod()->getBasicResponse($response['payment_method']));
+        $this->setDetails($this->getDetails()->getAdvancedResponse($response['details']));
         $this->setCreatedAt($response['created_at']);
 
         return $this;

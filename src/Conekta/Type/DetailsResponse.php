@@ -2,6 +2,8 @@
 
 namespace Conekta\Type;
 
+use Conekta\Type\BillingAddressResponse;
+
 class DetailsResponse {
 
     private $name;
@@ -10,7 +12,17 @@ class DetailsResponse {
 
     private $email;
 
+    private $dateOfBirth;
+
+    private $billingAdddress;
+
     private $lineItems;
+
+    function __construct()
+    {
+        $this->billingAdddress = new BillingAddressResponse;
+    }
+
 
     /**
      * @param mixed $email
@@ -76,12 +88,72 @@ class DetailsResponse {
         return $this->phone;
     }
 
+    /**
+     * @param \Conekta\Type\BillingAddressResponse $billingAdddress
+     */
+    public function setBillingAdddress($billingAdddress)
+    {
+        $this->billingAdddress = $billingAdddress;
+    }
+
+    /**
+     * @return \Conekta\Type\BillingAddressResponse
+     */
+    public function getBillingAdddress()
+    {
+        return $this->billingAdddress;
+    }
+
+    /**
+     * @param mixed $dateOfBirth
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth = $dateOfBirth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
     public function getBasicResponse($response)
     {
         $this->setName($response['name']);
         $this->setPhone($response['phone']);
         $this->setEmail($response['email']);
-        $this->setLineItems($response['lite_items']);
+
+        $lineItemsArray = $this->getLineItems();
+        if (is_array($response['lite_items']) && count($response['lite_items']) > 0) {
+
+            $lineItems = new LineItemsResponse();
+            $lineItemsArray = $lineItems->parseBasicResponse($response['line_items']);
+        }
+
+        $this->setLineItems($lineItemsArray);
+
+        return $this;
+    }
+
+    public function getAdvancedResponse($response)
+    {
+        $this->setName($response['name']);
+        $this->setPhone($response['phone']);
+        $this->setEmail($response['email']);
+        $this->setDateOfBirth($response['date_of_birth']);
+
+        $lineItemsArray = $this->getLineItems();
+        if (is_array($response['line_items']) && count($response['line_items']) > 0) {
+
+            $lineItems = new LineItemsResponse();
+            $lineItemsArray = $lineItems->parseBasicResponse($response['line_items']);
+        }
+
+        $this->setLineItems($lineItemsArray);
+        $this->setBillingAdddress($this->getBillingAdddress()->getBasicResponse($response['billing_address']));
 
         return $this;
     }

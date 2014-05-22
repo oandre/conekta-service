@@ -3,6 +3,7 @@
 namespace Conekta\Type;
 
 use Conekta\Type\AbstractType;
+use Conekta\Type\DetailsRequest;
 
 class ChargeRequest extends AbstractType{
 
@@ -20,8 +21,11 @@ class ChargeRequest extends AbstractType{
 
     private $reference;
 
+    private $details;
+
     public function __construct()
     {
+        $this->details = new DetailsRequest();
         $this->setUrl('charges');
     }
 
@@ -137,6 +141,22 @@ class ChargeRequest extends AbstractType{
         return $this->reference;
     }
 
+    /**
+     * @param \Conekta\Type\DetailsRequest $details
+     */
+    public function setDetails($details)
+    {
+        $this->details = $details;
+    }
+
+    /**
+     * @return \Conekta\Type\DetailsRequest
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
     public function setChargeParameters()
     {
         $parameters = array(
@@ -145,6 +165,22 @@ class ChargeRequest extends AbstractType{
             'currency' => $this->getCurrency(),
             'reference_id' => $this->getReference(),
             'card' => $this->getToken()
+        );
+
+        $this->setParameters($parameters);
+
+        return $this;
+    }
+
+    public function setAdvancedChargeParameters()
+    {
+        $parameters = array(
+            'description' => $this->getDescription(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'reference_id' => $this->getReference(),
+            'card' => $this->getToken(),
+            'details' => $this->getDetails()->setAdvancedChargeParameters(true)
         );
 
         $this->setParameters($parameters);
