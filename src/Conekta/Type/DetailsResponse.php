@@ -143,7 +143,19 @@ class DetailsResponse {
         $this->setName($response['name']);
         $this->setPhone($response['phone']);
         $this->setEmail($response['email']);
-        $this->setDateOfBirth($response['date_of_birth']);
+
+        if (array_key_exists('name', $response)) {
+            $this->setName($response['name']);
+        }
+        if (array_key_exists('phone', $response)) {
+            $this->setPhone($response['phone']);
+        }
+        if (array_key_exists('email', $response)) {
+            $this->setEmail($response['email']);
+        }
+        if (array_key_exists('date_of_birth', $response)) {
+            $this->setDateOfBirth($response['date_of_birth']);
+        }
 
         $lineItemsArray = $this->getLineItems();
         if (is_array($response['line_items']) && count($response['line_items']) > 0) {
