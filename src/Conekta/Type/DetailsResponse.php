@@ -127,7 +127,7 @@ class DetailsResponse {
         $this->setEmail($response['email']);
 
         $lineItemsArray = $this->getLineItems();
-        if (is_array($response['lite_items']) && count($response['lite_items']) > 0) {
+        if (is_array($response['line_items']) && count($response['line_items']) > 0) {
 
             $lineItems = new LineItemsResponse();
             $lineItemsArray = $lineItems->parseBasicResponse($response['line_items']);
