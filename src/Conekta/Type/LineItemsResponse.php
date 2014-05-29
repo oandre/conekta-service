@@ -116,12 +116,29 @@ class LineItemsResponse extends AbstractType{
 
     public function getBasicResponse($response)
     {
-        $this->setName($response['name']);
-        $this->setSku($response['sku']);
-        $this->setUnitPrice($response['unit_price']);
-        $this->setDescription($response['description']);
-        $this->setQuantity($response['quantity']);
-        $this->setType($response['type']);
+        if (array_key_exists('name', $response)) {
+            $this->setName($response['name']);
+        }
+
+        if (array_key_exists('sku', $response)) {
+            $this->setSku($response['sku']);
+        }
+
+        if (array_key_exists('unit_price', $response)) {
+            $this->setUnitPrice($response['unit_price']);
+        }
+
+        if (array_key_exists('description', $response)) {
+            $this->setDescription($response['description']);
+        }
+
+        if (array_key_exists('quantity', $response)) {
+            $this->setQuantity($response['quantity']);
+        }
+
+        if (array_key_exists('type', $response)) {
+            $this->setType($response['type']);
+        }
 
         return $this;
     }
