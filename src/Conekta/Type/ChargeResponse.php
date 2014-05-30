@@ -438,7 +438,10 @@ class ChargeResponse {
         $this->setFailureMessage($response['failure_message']);
         $this->setObject($response['object']);
         $this->setAmount($response['amount']);
-        $this->setAmountRefunded($response['amount_refunded']);
+
+        if (array_key_exists('amount_refunded', $response)) {
+            $this->setAmountRefunded($response['amount_refunded']);
+        }
 
         $refundArray = $this->getRefunds();
         if (is_array($response['refunds']) && count($response['refunds']) > 0) {
