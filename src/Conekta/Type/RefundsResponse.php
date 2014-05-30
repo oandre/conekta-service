@@ -80,8 +80,14 @@ class RefundsResponse {
     {
         $this->setCreatedAt($response['created_at']);
         $this->setAmount($response['amount']);
-        $this->setCurrency($response['currency']);
-        $this->setTransaction($response['transaction']);
+
+        if (array_key_exists('currency', $response)) {
+            $this->setCurrency($response['currency']);
+        }
+
+        if (array_key_exists('transaction', $response)) {
+            $this->setTransaction($response['transaction']);
+        }
 
         return $this;
     }
